@@ -6,10 +6,17 @@ export const useSocket = (serverPath) => {
   const [online, setOnline] = useState(false);
 
   const conectarSocket = useCallback(() => {
+    /**
+     * Mandamos el token para que el backend sepa que usuario se ha conectado
+     */
+    const token = localStorage.getItem('token');
     const socketTemp = io.connect(serverPath, {
       transports: ['websocket'],
       autoConnect: true,
       forceNew: true,
+      query: {
+        'x-token': token,
+      },
     });
     setSocket(socketTemp);
   }, [serverPath]);
