@@ -33,7 +33,28 @@ export const AuthProvider = ({ children }) => {
     return resp.ok;
   };
 
-  const register = (nombre, email, password) => {};
+  const register = async (nombre, email, password) => {
+    const resp = await fetchSinToken(
+      'login/new',
+      { email, password, nombre },
+      'POST'
+    );
+    console.log(resp);
+    if (resp.ok) {
+      localStorage.setItem('token', resp.token);
+      const { usuario } = resp;
+      setAuth({
+        uid: usuario.uid,
+        checking: false,
+        logged: true,
+        name: usuario.nombre,
+        email: usuario.email,
+      });
+      console.log('Registrado!');
+    }
+
+    return { ok: resp.ok, error: resp.msg };
+  };
 
   const verificaToken = useCallback(async () => {}, []);
 
