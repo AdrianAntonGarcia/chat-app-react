@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthContext';
 
+import Swal from 'sweetalert2';
+
 export const LoginPage = () => {
   const { login } = useContext(AuthContext);
   const [form, setForm] = useState({
@@ -13,9 +15,11 @@ export const LoginPage = () => {
   useEffect(() => {
     const remembermeEmail = localStorage.getItem('email');
     if (remembermeEmail) {
-      setForm({ ...form, rememberme: true, email: remembermeEmail });
+      /**La función setForm también retorna el estado */
+      setForm((form) => {
+        return { ...form, rememberme: true, email: remembermeEmail };
+      });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChange = ({ target }) => {
@@ -37,14 +41,17 @@ export const LoginPage = () => {
     });
   };
 
-  const onSubmit = (ev) => {
+  const onSubmit = async (ev) => {
     ev.preventDefault();
 
     form.rememberme
       ? localStorage.setItem('email', form.email)
       : localStorage.removeItem('email');
     const { email, password } = form;
-    login(email, password);
+    const ok = await login(email, password);
+    if (!ok) {
+      Swal.fire('Error', 'Verifique el usuario y contraseña', 'error');
+    }
   };
   return (
     <form

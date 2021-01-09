@@ -17,7 +17,19 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const resp = await fetchSinToken('login', { email, password }, 'POST');
 
-    console.log(resp);
+    if (resp.ok) {
+      localStorage.setItem('token', resp.token);
+      const { usuarioDB: usuario } = resp;
+      setAuth({
+        uid: usuario.uid,
+        checking: false,
+        logged: true,
+        name: usuario.nombre,
+        email: usuario.email,
+      });
+    }
+
+    return resp.ok;
   };
 
   const register = (nombre, email, password) => {};
@@ -27,7 +39,9 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {};
 
   return (
-    <AuthContext.Provider value={{ login, register, verificaToken, logout }}>
+    <AuthContext.Provider
+      value={{ auth, login, register, verificaToken, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
