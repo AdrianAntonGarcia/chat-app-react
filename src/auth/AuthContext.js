@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
 
   /**
    * Función que llama para hacer el login del usuario.
-   * Establece los valores del contextod el usuario, establece
+   * Establece los valores del contexto del usuario, establece
    * el token en el localStorage y el logged como true
    * @param {*} email
    * @param {*} password
@@ -40,8 +40,8 @@ export const AuthProvider = ({ children }) => {
     return resp.ok;
   };
   /**
-   * Función que llama para hacer el login del usuario.
-   * Establece los valores del contextod el usuario, establece
+   * Función que llama para hacer el registro del usuario.
+   * Establece los valores del contexto del usuario, establece
    * el token en el localStorage y el logged como true
    * @param {*} nombre
    * @param {*} email
@@ -70,6 +70,11 @@ export const AuthProvider = ({ children }) => {
     return { ok: resp.ok, error: resp.msg };
   };
 
+  /**
+   * Función que comprueba, si hay token, que el usuario siga siendo válido,
+   * si lo es actualiza el token y pone el logged a true, si no lo pone a false.
+   * Se ejecuta cuando arranca la aplicación o se refresca
+   */
   const verificaToken = useCallback(async () => {
     const token = localStorage.getItem('token');
     // Si el token no existe
