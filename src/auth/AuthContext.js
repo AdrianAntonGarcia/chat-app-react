@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useState } from 'react';
-import { fetchSinToken } from '../helpers/fetch';
+import { fetchConToken, fetchSinToken } from '../helpers/fetch';
 
 export const AuthContext = createContext();
 
@@ -14,6 +14,13 @@ const initialState = {
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(initialState);
 
+  /**
+   * Función que llama para hacer el login del usuario.
+   * Establece los valores del contextod el usuario, establece
+   * el token en el localStorage y el logged como true
+   * @param {*} email
+   * @param {*} password
+   */
   const login = async (email, password) => {
     const resp = await fetchSinToken('login', { email, password }, 'POST');
 
@@ -32,7 +39,14 @@ export const AuthProvider = ({ children }) => {
 
     return resp.ok;
   };
-
+  /**
+   * Función que llama para hacer el login del usuario.
+   * Establece los valores del contextod el usuario, establece
+   * el token en el localStorage y el logged como true
+   * @param {*} nombre
+   * @param {*} email
+   * @param {*} password
+   */
   const register = async (nombre, email, password) => {
     const resp = await fetchSinToken(
       'login/new',
@@ -56,7 +70,37 @@ export const AuthProvider = ({ children }) => {
     return { ok: resp.ok, error: resp.msg };
   };
 
-  const verificaToken = useCallback(async () => {}, []);
+  const verificaToken = useCallback(async () => {
+    const token = localStorage.getItem('token');
+    // Si el token no existe
+    if (!token) {
+      setAuth({
+        checking: false,
+        logged: false,
+      });
+      return false;
+    }
+    const resp = await fetchConToken('login/renew');
+    if (resp.ok) {
+      localStorage.setItem('token', resp.token);
+      const { usuario } = resp;
+      setAuth({
+        uid: usuario.uid,
+        checking: false,
+        logged: true,
+        name: usuario.nombre,
+        email: usuario.email,
+      });
+      console.log('Autenticado!');
+      return true;
+    } else {
+      setAuth({
+        checking: false,
+        logged: false,
+      });
+      return false;
+    }
+  }, []);
 
   const logout = () => {};
 
