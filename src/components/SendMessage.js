@@ -17,7 +17,7 @@ export const SendMessage = () => {
     if (mensaje.length === 0) {
       return;
     }
-    socket.emit('mensaje-persona', {
+    socket.emit('mensaje-personal', {
       de: auth.uid,
       para: chatState.chatActivo,
       mensaje,
