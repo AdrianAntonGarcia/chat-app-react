@@ -7,7 +7,7 @@ const initialState = {
   uid: '',
   chatActivo: null, // UID del ususario al que yo quiero enviar mensajes
   usuarios: [], //Todos los usuarios de la base de datos
-  mensjaes: [], // El chat seleccionado
+  mensajes: [], // El chat seleccionado
 };
 
 export const ChatProvider = ({ children }) => {
