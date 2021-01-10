@@ -5,6 +5,7 @@ import { ChatContext } from './chat/ChatContext';
 import { useSocket } from '../hooks/useSocket';
 
 import { types } from '../types/types';
+import { scrollToBottomAnimated } from '../helpers/scrollToBottom';
 
 export const SocketContex = createContext();
 
@@ -42,6 +43,7 @@ export const SocketProvider = ({ children }) => {
         type: types.nuevoMensaje,
         payload: mensaje,
       });
+      scrollToBottomAnimated('messages');
     });
   }, [dispatch, socket]);
   return (

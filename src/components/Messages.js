@@ -11,7 +11,7 @@ export const Messages = () => {
   return (
     <div className="mesgs">
       {/* <!-- Historia inicio --> */}
-      <div className="msg_history">
+      <div id="messages" className="msg_history">
         {chatState.mensajes.map((msg) =>
           msg.para === auth.uid ? (
             <IncomingMessage key={msg._id} msg={msg} />
