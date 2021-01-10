@@ -21,6 +21,13 @@ export const chatReducer = (state, action) => {
       }
     case types.cargarMensajes:
       return { ...state, mensajes: [...action.payload] };
+    case types.borrarChat:
+      return {
+        uid: '',
+        chatActivo: null,
+        usuarios: [],
+        mensajes: [],
+      };
     default:
       return state;
   }
